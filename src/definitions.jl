@@ -164,33 +164,6 @@ inv(p::DHTPlan) =
 LinearAlgebra.ldiv!(y::AbstractArray, p::DHTPlan, x::AbstractArray) = LinearAlgebra.mul!(y, inv(p), x)
 
 ##############################################################################
-# This is a generic FHTPlan
-
-struct FHTPlan{T,P,S} <: DHTPlan{T}
-    bfftplan::P
-    function FHTPlan(bfftplan::Plan)
-        T = eltype(bfftplan)
-        P = typeof(bfftplan)
-        S = fieldtypes(T)[1]
-        new{T,P,S}(bfftplan)
-    end
-end
-size(p::FHTPlan) = size(p.bfftplan)
-fftdims(p::FHTPlan) = fftdims(p.bfftplan)
-fftfreq(p::FHTPlan) = fftfreq(p.bfftplan)
-
-function LinearAlgebra.mul!(y::Array{S}, p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
-    fx = p.bfftplan * x
-    y .= real(fx) .+ imag(fx)
-end
-
-function *(p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
-    z = similar(x)
-    LinearAlgebra.mul!(z, p, x)
-    return z
-end
-
-##############################################################################
 # implementations only need to provide the forward FHT transform.
 # ifht can be computed by scaling the forward transform.
 
@@ -199,7 +172,7 @@ struct ScaledDHTPlan{T,P,N} <: DHTPlan{T}
     scale::N
     function ScaledDHTPlan(p::DHTPlan, scale)
         T = eltype(p)
-        P = typeof(P)
+        P = typeof(p)
         N = fieldtypes(T)[1]
         return new{T, P, N}(p, convert(N, scale))
     end
@@ -232,3 +205,33 @@ inv(p::ScaledDHTPlan) = ScaledDHTPlan(inv(p.p), inv(p.scale))
 
 LinearAlgebra.mul!(y::AbstractArray, p::ScaledDHTPlan, x::AbstractArray) =
     LinearAlgebra.lmul!(p.scale, LinearAlgebra.mul!(y, p.p, x))
+
+
+##############################################################################
+# This is a generic FHTPlan
+
+struct FHTPlan{T,P,S} <: DHTPlan{T}
+    bfftplan::P
+    function FHTPlan(bfftplan::Plan)
+        T = eltype(bfftplan)
+        P = typeof(bfftplan)
+        S = fieldtypes(T)[1]
+        new{T,P,S}(bfftplan)
+    end
+end
+size(p::FHTPlan) = size(p.bfftplan)
+fftdims(p::FHTPlan) = fftdims(p.bfftplan)
+fftfreq(p::FHTPlan) = fftfreq(p.bfftplan)
+
+function LinearAlgebra.mul!(y::Array{S}, p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
+    fx = p.bfftplan * x
+    y .= real(fx) .+ imag(fx)
+end
+
+function *(p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
+    z = similar(x)
+    LinearAlgebra.mul!(z, p, x)
+    return z
+end
+
+plan_inv(p::FHTPlan) = ScaledDHTPlan(p, normalization(Array{Bool}(undef, size(p)), p.bfftplan.region))
