@@ -166,24 +166,25 @@ LinearAlgebra.ldiv!(y::AbstractArray, p::DHTPlan, x::AbstractArray) = LinearAlge
 ##############################################################################
 # This is a generic FHTPlan
 
-struct FHTPlan{T,P} <: DHTPlan{T}
+struct FHTPlan{T,P,S} <: DHTPlan{T}
     bfftplan::P
     function FHTPlan(bfftplan::Plan)
         T = eltype(bfftplan)
         P = typeof(bfftplan)
-        new{T,P}(bfftplan)
+        S = fieldtypes(T)[1]
+        new{T,P,S}(bfftplan)
     end
 end
 size(p::FHTPlan) = size(p.bfftplan)
 fftdims(p::FHTPlan) = fftdims(p.bfftplan)
 fftfreq(p::FHTPlan) = fftfreq(p.bfftplan)
 
-function LinearAlgebra.mul!(y::Array{T}, p::FHTPlan{T,P}, x::Array{T}) where {T,P}
+function LinearAlgebra.mul!(y::Array{S}, p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
     fx = p.bfftplan * x
     y .= real(fx) .+ imag(fx)
 end
 
-function *(p::FHTPlan{T,P}, x::Array{T}) where {T,P}
+function *(p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
     z = similar(x)
     LinearAlgebra.mul!(z, p, x)
     return z
