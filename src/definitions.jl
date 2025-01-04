@@ -49,7 +49,7 @@ for f in (:fht, :ifht, :fht!, :ifht!)
 end
 
 """
-    plan_fht(A, dims=ndims(A); flags=FFTW.ESTIMATE, timelimit=Inf)
+    plan_fht(A [, dims]; flags=FFTW.ESTIMATE, timelimit=Inf)
 
 Pre-plan an optimized FHT along given dimensions (`dims`) of arrays matching the shape and type of `A`. 
 (The first two arguments have the same meaning as for `fht`(@ref)).)
