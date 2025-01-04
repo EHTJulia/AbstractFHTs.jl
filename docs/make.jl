@@ -1,7 +1,7 @@
 using AbstractFHTs
 using Documenter
 
-DocMeta.setdocmeta!(FastHartleyTransforms, :DocTestSetup, :(using FastHartleyTransforms); recursive=true)
+DocMeta.setdocmeta!(AbstractFHTs, :DocTestSetup, :(using AbstractFHTs); recursive=true)
 
 makedocs(;
     modules=[AbstractFHTs],
