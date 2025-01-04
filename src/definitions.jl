@@ -178,6 +178,17 @@ size(p::FHTPlan) = size(p.bfftplan)
 fftdims(p::FHTPlan) = fftdims(p.bfftplan)
 fftfreqs(p::FHTPlan) = fftfreqs(p.bfftplan)
 
+function LinearAlgebra.mul!(y::Array{T}, p::FHTPlan{T,P}, x::Array{T}) where {T,P}
+    fx = p.bfftplan * x
+    y .= real(fx) .+ imag(fx)
+end
+
+function *(p::FHTPlan{T,P}, x::Array{T}) where {T,P}
+    z = similar(x)
+    LinearAlgebra.mul!(z, p, x)
+    return z
+end
+
 ##############################################################################
 # implementations only need to provide the forward FHT transform.
 # ifht can be computed by scaling the forward transform.
