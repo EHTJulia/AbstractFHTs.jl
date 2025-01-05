@@ -169,7 +169,6 @@ ScaledDHTPlan(p::ScaledDHTPlan, α::Number) = ScaledDHTPlan(p.p, p.scale * α)
 
 size(p::ScaledDHTPlan) = size(p.p)
 fftdims(p::ScaledDHTPlan) = fftdims(p.p)
-fftfreq(p::ScaledDHTPlan) = fftfreq(p.p)
 
 *(p::ScaledDHTPlan, x::AbstractArray) = LinearAlgebra.rmul!(p.p * x, p.scale)
 *(α::Number, p::DHTPlan) = ScaledDHTPlan(p, α)
@@ -209,7 +208,6 @@ struct FHTPlan{T,P,S} <: DHTPlan{T}
 end
 size(p::FHTPlan) = size(p.bfftplan)
 fftdims(p::FHTPlan) = fftdims(p.bfftplan)
-fftfreq(p::FHTPlan) = fftfreq(p.bfftplan)
 
 function LinearAlgebra.mul!(y::Array{S}, p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
     fx = p.bfftplan * x
@@ -236,7 +234,6 @@ struct FHTPlanInplace{T,P,S} <: DHTPlan{T}
 end
 size(p::FHTPlanInplace) = size(p.bfftplan)
 fftdims(p::FHTPlanInplace) = fftdims(p.bfftplan)
-fftfreq(p::FHTPlanInplace) = fftfreq(p.bfftplan)
 
 function LinearAlgebra.mul!(y::Array{S}, p::FHTPlanInplace{T,P,S}, x::Array{S}) where {T,P,S}
     fx = p.bfftplan * x
