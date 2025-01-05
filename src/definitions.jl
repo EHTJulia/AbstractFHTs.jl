@@ -45,7 +45,7 @@ end
     plan_fht(A [, dims]; flags=FFTW.ESTIMATE, timelimit=Inf)
 
 Pre-plan an optimized FHT along given dimensions (`dims`) of arrays matching the shape and type of `A`. 
-(The first two arguments have the same meaning as for `fht`(@ref)).)
+(The first two arguments have the same meaning as for [`fht`](@ref)).)
 Returns an object `P` which represents the linear operator computed by the FHT, and 
 which contains all of the information needed to compute `fht(A, dims)` quickly.
 """
@@ -117,13 +117,13 @@ A one-dimensional FHT computes the one-dimensional discrete Hartley transform (D
 defined by
 
 ```math
-\\operatorname{DFT}(A)[k] = \\sum_{n=1}^{\\operatorname{length}(A)} \\cas \\left( +i\\frac{2\\pi(n-1)(k-1)}{\\operatorname{length}(A)} \\right) A[n],
+\\operatorname{DFT}(A)[k] = \\sum_{n=1}^{\\operatorname{length}(A)} \\operatorname{cas} \\left( +i\\frac{2\\pi(n-1)(k-1)}{\\operatorname{length}(A)} \\right) A[n],
 ```
 
-where `\\cas` is the cosine-and-sine function, or alternatively called Hartley kernel, defined by
+where ``\\operatorname{cas}`` is the cosine-and-sine function, or alternatively called Hartley kernel, defined by
 
 ```math
-\\cas(x) = \\cos(x) + \\sin(x).
+\\operatorname{cas}(x) = \\cos(x) + \\sin(x).
 ```
 
 A multidimensional FHT simply performs this operation along each transformed dimension of `A`.
