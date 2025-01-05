@@ -1,4 +1,4 @@
-module AbstractFHTs
+module AbstractFastHartleyTransforms
 import AbstractFFTs: Plan,
                      eltype, size, 
                      fftdims, fftshift, ifftshift, fftshift!, ifftshift!, Frequencies, fftfreq
