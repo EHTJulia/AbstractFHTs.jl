@@ -71,6 +71,6 @@ jobs:
         shell: julia --project=docs --color=yes {0}
         run: |
           using Documenter: DocMeta, doctest
-          using FastHartleyTransforms
-          DocMeta.setdocmeta!(FastHartleyTransforms, :DocTestSetup, :(using FastHartleyTransforms); recursive=true)
-          doctest(FastHartleyTransforms)
+          using AbstractFHTs
+          DocMeta.setdocmeta!(AbstractFHTs, :DocTestSetup, :(using AbstractFHTs); recursive=true)
+          doctest(AbstractFHTs)

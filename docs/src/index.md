@@ -2,7 +2,7 @@
 CurrentModule = AbstractFHTs
 ```
 
-# FastHartleyTransforms
+# AbstractFHTs
 
 Documentation for [AbstractFHTs](https://github.com/EHTJulia/AbstractFHTs.jl).
 
