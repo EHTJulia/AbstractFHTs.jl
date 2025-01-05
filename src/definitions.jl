@@ -15,11 +15,7 @@ ndims(p::DHTPlan) = length(size(p))
 length(p::DHTPlan) = prod(size(p))::Int
 
 
-"""
-    scale_type(::FFT/DHTPlan)
-
-Extract the element type of the scaling factor of an FHT/FFT plan.
-"""
+# Extract the element type of the scaling factor of an FHT/FFT plan.
 scale_type(::Type{<:DHTPlan{T}}) where {T} = fieldtypes(T)[1]
 scale_type(P::Type{<:Plan}) = fieldtypes(eltype(P))[1]
 
