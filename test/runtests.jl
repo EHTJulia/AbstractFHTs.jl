@@ -1,3 +1,4 @@
+using StableRNGs
 using Test
 
 import FFTW: plan_bfft, ESTIMATE
