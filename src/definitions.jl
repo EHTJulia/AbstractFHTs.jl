@@ -1,6 +1,3 @@
-export plan_fht, plan_fht!, plan_ifht, plan_ifht!,
-       fht, fht!, ifht, ifht!
-
 # DHT plan where the inputs are an array of eltype T
 abstract type DHTPlan{T} end
 
@@ -19,7 +16,7 @@ length(p::DHTPlan) = prod(size(p))::Int
 
 
 """
-    scale_type(::FFT/FHTPlan)
+    scale_type(::FFT/DHTPlan)
 
 Extract the element type of the scaling factor of an FHT/FFT plan.
 """
@@ -208,7 +205,7 @@ LinearAlgebra.mul!(y::AbstractArray, p::ScaledDHTPlan, x::AbstractArray) =
 
 
 ##############################################################################
-# This is a generic FHTPlan
+# This is a generic FHT Plan
 
 struct FHTPlan{T,P,S} <: DHTPlan{T}
     bfftplan::P
@@ -235,3 +232,28 @@ function *(p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
 end
 
 plan_inv(p::FHTPlan) = ScaledDHTPlan(p, normalization(Array{Bool}(undef, size(p)), p.bfftplan.region))
+
+struct FHTPlanInplace{T,P,S} <: DHTPlan{T}
+    bfftplan::P
+    function FHTPlan(bfftplan::Plan)
+        T = eltype(bfftplan)
+        P = typeof(bfftplan)
+        S = fieldtypes(T)[1]
+        new{T,P,S}(bfftplan)
+    end
+end
+size(p::FHTPlanInplace) = size(p.bfftplan)
+fftdims(p::FHTPlanInplace) = fftdims(p.bfftplan)
+fftfreq(p::FHTPlanInplace) = fftfreq(p.bfftplan)
+
+function LinearAlgebra.mul!(y::Array{S}, p::FHTPlanInplace{T,P,S}, x::Array{S}) where {T,P,S}
+    fx = p.bfftplan * x
+    y .= real(fx) .+ imag(fx)
+end
+
+function *(p::FHTPlanInplace{T,P,S}, x::Array{S}) where {T,P,S}
+    LinearAlgebra.mul!(x, p, x)
+    return x
+end
+
+plan_inv(p::FHTPlanInplace) = ScaledDHTPlan(p, normalization(Array{Bool}(undef, size(p)), p.bfftplan.region))
