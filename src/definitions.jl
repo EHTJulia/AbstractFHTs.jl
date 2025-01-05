@@ -1,3 +1,5 @@
+# These definitions are heavily inspired by the AbstractFFTs.jl package.
+
 # DHT plan where the inputs are an array of eltype T
 abstract type DHTPlan{T} end
 
