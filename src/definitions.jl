@@ -31,7 +31,7 @@ _to1(::Tuple{Base.OneTo,Vararg{Base.OneTo}}, x) = x
 _to1(::Tuple, x) = copy1(eltype(x), x)
 
 # implementations only need to provide plan_X(x, region)
-# for X in (:fft, :bfft, ...):
+# for X in (:fht, :ifht, ...):
 for f in (:fht, :ifht, :fht!, :ifht!)
     pf = Symbol("plan_", f)
     @eval begin
@@ -144,10 +144,10 @@ inv(p::DHTPlan) = plan_inv(p)
 \(p::DHTPlan, x::AbstractArray) = inv(p) * x
 LinearAlgebra.ldiv!(y::AbstractArray, p::DHTPlan, x::AbstractArray) = LinearAlgebra.mul!(y, inv(p), x)
 
+
 ##############################################################################
 # implementations only need to provide the forward FHT transform.
 # ifht can be computed by scaling the forward transform.
-
 struct ScaledDHTPlan{T,P,N} <: DHTPlan{T}
     p::P
     scale::N
