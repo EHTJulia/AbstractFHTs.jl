@@ -2,16 +2,24 @@ using StableRNGs
 using Test
 
 import FFTW: plan_bfft, ESTIMATE
-import AbstractFastHartleyTransforms: FHTPlan, FHTPlanInplace,
-    plan_fht, plan_fht!, plan_ifht, plan_ifht!,
-    fht, fht!, ifht, ifht!,
-    *, inv, \,
-    eltype, size, length, ndims, 
-    fftdims
-export plan_fht, plan_fht!, plan_ifht, plan_ifht!,
-    fht, fht!, ifht, ifht!,
-    *, inv, \,
-    eltype, size, length, ndims, 
+import AbstractFastHartleyTransforms:
+    FHTPlan,
+    FHTPlanInplace,
+    plan_fht,
+    plan_fht!,
+    plan_ifht,
+    plan_ifht!,
+    fht,
+    fht!,
+    ifht,
+    ifht!,
+    *,
+    inv,
+    \,
+    eltype,
+    size,
+    length,
+    ndims,
     fftdims
 
 function plan_fht(A, dims; flags=ESTIMATE, timelimit=Inf)
@@ -52,9 +60,9 @@ end
         # check inverse of inverse is the same
         x1 = ip1 * y1
         x2 = ip2 * deepcopy(y1)
-        x3 = ip3 * y1 
+        x3 = ip3 * y1
         x4 = ip4 * deepcopy(y1)
-        x5 = ifht(y1) 
+        x5 = ifht(y1)
         x6 = ifht!(deepcopy(y1))
         x7 = p1 \ y1
         x8 = p2 \ deepcopy(y1)
@@ -82,7 +90,7 @@ end
             @test fftdims(p) == fftdims(p.bfftplan)
         end
 
-        for p in (ip1,ip2,ip3,ip4)
+        for p in (ip1, ip2, ip3, ip4)
             @test eltype(p) == eltype(p1)
             @test ndims(p) == ndims(p1)
             @test length(p) == length(p1)
