@@ -117,15 +117,12 @@ A one-dimensional FHT computes the one-dimensional discrete Hartley transform (D
 defined by
 
 ```math
-\\operatorname{DFT}(A)[k] =
-  \\sum_{n=1}^{\\operatorname{length}(A)}
-  \\cas\\left(+i\\frac{2\\pi
-  (n-1)(k-1)}{\\operatorname{length}(A)} \\right) A[n],
+\\operatorname{DFT}(A)[k] = \\sum_{n=1}^{\\operatorname{length}(A)} \\cas \\left( +i\\frac{2\\pi(n-1)(k-1)}{\\operatorname{length}(A)} \\right) A[n],
 ```
 
 where `\\cas` is the cosine-and-sine function, or alternatively called Hartley kernel, defined by
 
-```
+```math
 \\cas(x) = \\cos(x) + \\sin(x).
 ```
 
