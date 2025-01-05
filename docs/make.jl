@@ -1,14 +1,14 @@
-using AbstractFHTs
+using AbstractFastHartleyTransforms
 using Documenter
 
-DocMeta.setdocmeta!(AbstractFHTs, :DocTestSetup, :(using AbstractFHTs); recursive=true)
+DocMeta.setdocmeta!(AbstractFastHartleyTransforms, :DocTestSetup, :(using AbstractFastHartleyTransforms); recursive=true)
 
 makedocs(;
-    modules=[AbstractFHTs],
+    modules=[AbstractFastHartleyTransforms],
     authors="Kazunori Akiyama",
-    sitename="AbstractFHTs.jl",
+    sitename="AbstractFastHartleyTransforms.jl",
     format=Documenter.HTML(;
-        canonical="https://EHTJulia.github.io/AbstractFHTs.jl",
+        canonical="https://EHTJulia.github.io/AbstractFastHartleyTransforms.jl",
         edit_link="main",
         assets=String[],
     ),
@@ -18,6 +18,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/EHTJulia/AbstractFHTs.jl",
+    repo="github.com/EHTJulia/AbstractFastHartleyTransforms.jl",
     devbranch="main",
 )

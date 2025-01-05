@@ -1,6 +1,6 @@
-using AbstractFHTs
+using AbstractFastHartleyTransforms
 using Test
 
-@testset "AbstractFHTs.jl" begin
+@testset "AbstractFastHartleyTransforms.jl" begin
     # Write your tests here.
 end
