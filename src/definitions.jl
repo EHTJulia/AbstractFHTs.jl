@@ -142,21 +142,12 @@ function fht end
 # only require implementation to provide *(::DHTPlan{T}, ::Array{T})
 *(p::DHTPlan{T}, x::AbstractArray) where {T} = p * copy1(T, x)
 
+
 ##############################################################################
-# To support inv, \, and ldiv!(y, p, x), we require Plan subtypes
-# to have a pinv::DFTPlan field, which caches the inverse plan, and which
-# should be initially undefined.  They should also implement
-# plan_inv(p) to construct the inverse of a plan p.
-
-# hack from @simonster (in #6193) to compute the return type of plan_inv
-# without actually calling it or even constructing the empty arrays.
-_pinv_type(p::DHTPlan) = typeof([plan_inv(x) for x in typeof(p)[]])
-pinv_type(p::DHTPlan) = eltype(_pinv_type(p))
-
+# inverse of a plan
 function plan_inv end
 
-inv(p::DHTPlan) =
-    isdefined(p, :pinv) ? p.pinv::pinv_type(p) : (p.pinv = plan_inv(p))
+inv(p::DHTPlan) = plan_inv(p)
 \(p::DHTPlan, x::AbstractArray) = inv(p) * x
 LinearAlgebra.ldiv!(y::AbstractArray, p::DHTPlan, x::AbstractArray) = LinearAlgebra.mul!(y, inv(p), x)
 
