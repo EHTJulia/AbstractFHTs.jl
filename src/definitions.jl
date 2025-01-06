@@ -126,7 +126,7 @@ A multidimensional FHT simply performs this operation along each transformed dim
 function fht end
 
 ##############################################################################
-# only require implementation to provide *(::DHTPlan{T}, ::Array{T})
+# only require implementation to provide *(::DHTPlan{T}, ::AbstractArray{T})
 *(p::DHTPlan{T}, x::AbstractArray) where {T} = p * copy1(T, x)
 
 ##############################################################################
@@ -198,13 +198,15 @@ end
 size(p::FHTPlan) = size(p.bfftplan)
 fftdims(p::FHTPlan) = fftdims(p.bfftplan)
 
-function LinearAlgebra.mul!(y::Array{S}, p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
+function LinearAlgebra.mul!(
+    y::AbstractArray{S}, p::FHTPlan{T,P,S}, x::AbstractArray{S}
+) where {T,P,S}
     fx = p.bfftplan * x
     y .= real(fx) .+ imag(fx)
     return nothing
 end
 
-function *(p::FHTPlan{T,P,S}, x::Array{S}) where {T,P,S}
+function *(p::FHTPlan{T,P,S}, x::AbstractArray{S}) where {T,P,S}
     z = similar(x)
     LinearAlgebra.mul!(z, p, x)
     return z
@@ -227,14 +229,14 @@ size(p::FHTPlanInplace) = size(p.bfftplan)
 fftdims(p::FHTPlanInplace) = fftdims(p.bfftplan)
 
 function LinearAlgebra.mul!(
-    y::Array{S}, p::FHTPlanInplace{T,P,S}, x::Array{S}
+    y::AbstractArray{S}, p::FHTPlanInplace{T,P,S}, x::AbstractArray{S}
 ) where {T,P,S}
     fx = p.bfftplan * x
     y .= real(fx) .+ imag(fx)
     return nothing
 end
 
-function *(p::FHTPlanInplace{T,P,S}, x::Array{S}) where {T,P,S}
+function *(p::FHTPlanInplace{T,P,S}, x::AbstractArray{S}) where {T,P,S}
     LinearAlgebra.mul!(x, p, x)
     return x
 end
