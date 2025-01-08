@@ -14,10 +14,6 @@ size(p::DHTPlan, dim) = size(p)[dim]
 ndims(p::DHTPlan) = length(size(p))
 length(p::DHTPlan) = prod(size(p))::Int
 
-# Extract the element type of the scaling factor of an FHT/FFT plan.
-scale_type(::Type{<:DHTPlan{T}}) where {T} = fieldtypes(T)[1]
-scale_type(P::Type{<:Plan}) = fieldtypes(eltype(P))[1]
-
 # copy to a 1-based array, using circular permutation
 function copy1(::Type{T}, x) where {T}
     y = Array{T}(undef, map(length, axes(x)))
@@ -142,14 +138,13 @@ end
 ##############################################################################
 # implementations only need to provide the forward FHT transform.
 # ifht can be computed by scaling the forward transform.
-struct ScaledDHTPlan{T,P,N} <: DHTPlan{T}
+struct ScaledDHTPlan{T,P} <: DHTPlan{T}
     p::P
-    scale::N
+    scale::T
     function ScaledDHTPlan(p::DHTPlan, scale)
         T = eltype(p)
         P = typeof(p)
-        N = fieldtypes(T)[1]
-        return new{T,P,N}(p, convert(N, scale))
+        return new{T,P}(p, convert(T, scale))
     end
 end
 ScaledDHTPlan(p::ScaledDHTPlan, α::Number) = ScaledDHTPlan(p.p, p.scale * α)

@@ -1,7 +1,7 @@
 using StableRNGs
 using Test
 
-import FFTW: plan_bfft, ESTIMATE, plan_r2r, DHT
+import FFTW: plan_bfft, ESTIMATE, plan_r2r, DHT, plan_r2r!
 import AbstractFastHartleyTransforms:
     R2RPlan,
     R2RPlanInplace,
@@ -40,7 +40,7 @@ function plan_fht!(
     A, dims; flags=ESTIMATE, timelimit=Inf, use_r2r::Bool=ndims(A) == 1 ? true : false
 )
     if use_r2r
-        r2rplan = plan_r2r(A, DHT, dims; flags=flags, timelimit=timelimit)
+        r2rplan = plan_r2r!(A, DHT, dims; flags=flags, timelimit=timelimit)
         return R2RPlanInplace(r2rplan)
     else
         bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
@@ -87,12 +87,10 @@ end
         check_inv(p2 \ deepcopy(y1), x, x1)
 
         # check methods
-        for p in (p1, p2)
-            @test eltype(p) == eltype(p.bfftplan)
-            @test ndims(p) == ndims(p.bfftplan)
-            @test length(p) == length(p.bfftplan)
-            @test fftdims(p) == fftdims(p.bfftplan)
-        end
+        @test eltype(p1) == eltype(p2)
+        @test ndims(p1) == ndims(p2)
+        @test length(p1) == length(p2)
+        @test fftdims(p1) == fftdims(p2)
 
         for p in (ip1, ip2, ip3, ip4)
             @test eltype(p) == eltype(p1)
