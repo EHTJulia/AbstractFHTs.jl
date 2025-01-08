@@ -1,8 +1,10 @@
 using StableRNGs
 using Test
 
-import FFTW: plan_bfft, ESTIMATE
+import FFTW: plan_bfft, ESTIMATE, plan_r2r, DHT
 import AbstractFastHartleyTransforms:
+    R2RPlan,
+    R2RPlanInplace,
     BFFTPlan,
     BFFTPlanInplace,
     plan_fht,
@@ -22,14 +24,28 @@ import AbstractFastHartleyTransforms:
     ndims,
     fftdims
 
-function plan_fht(A, dims; flags=ESTIMATE, timelimit=Inf)
-    bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
-    return BFFTPlan(bfftplan)
+function plan_fht(
+    A, dims; flags=ESTIMATE, timelimit=Inf, use_r2r::Bool=ndims(A) == 1 ? true : false
+)
+    if use_r2r
+        r2rplan = plan_r2r(A, DHT, dims; flags=flags, timelimit=timelimit)
+        return R2RPlan(r2rplan)
+    else
+        bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
+        return BFFTPlan(bfftplan)
+    end
 end
 
-function plan_fht!(A, dims; flags=ESTIMATE, timelimit=Inf)
-    bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
-    return BFFTPlanInplace(bfftplan)
+function plan_fht!(
+    A, dims; flags=ESTIMATE, timelimit=Inf, use_r2r::Bool=ndims(A) == 1 ? true : false
+)
+    if use_r2r
+        r2rplan = plan_r2r(A, DHT, dims; flags=flags, timelimit=timelimit)
+        return R2RPlanInplace(r2rplan)
+    else
+        bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
+        return BFFTPlanInplace(bfftplan)
+    end
 end
 
 function check_inv(xinv, xorg, xinvref)
