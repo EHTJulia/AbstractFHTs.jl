@@ -3,8 +3,8 @@ using Test
 
 import FFTW: plan_bfft, ESTIMATE
 import AbstractFastHartleyTransforms:
-    FHTPlan,
-    FHTPlanInplace,
+    BFFTPlan,
+    BFFTPlanInplace,
     plan_fht,
     plan_fht!,
     plan_ifht,
@@ -24,12 +24,12 @@ import AbstractFastHartleyTransforms:
 
 function plan_fht(A, dims; flags=ESTIMATE, timelimit=Inf)
     bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
-    return FHTPlan(bfftplan)
+    return BFFTPlan(bfftplan)
 end
 
 function plan_fht!(A, dims; flags=ESTIMATE, timelimit=Inf)
     bfftplan = plan_bfft(A, dims; flags=flags, timelimit=timelimit)
-    return FHTPlanInplace(bfftplan)
+    return BFFTPlanInplace(bfftplan)
 end
 
 @testset "AbstractFastHartleyTransforms.jl" begin
