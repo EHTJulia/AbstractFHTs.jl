@@ -16,14 +16,11 @@ fftdims(p::R2RPlan) = fftdims(p.r2rplan)
 function LinearAlgebra.mul!(
     y::AbstractArray{S}, p::R2RPlan{T,P,S}, x::AbstractArray{S}
 ) where {T,P,S}
-    y .= p.r2rplan * x
-    return nothing
+    return LinearAlgebra.mul!(y, p.r2rplan, x)
 end
 
 function *(p::R2RPlan{T,P,S}, x::AbstractArray{S}) where {T,P,S}
-    z = similar(x)
-    LinearAlgebra.mul!(z, p, x)
-    return z
+    return p.r2rplan * x
 end
 
 function plan_inv(p::R2RPlan)
@@ -45,13 +42,11 @@ fftdims(p::R2RPlanInplace) = fftdims(p.r2rplan)
 function LinearAlgebra.mul!(
     y::AbstractArray{S}, p::R2RPlanInplace{T,P,S}, x::AbstractArray{S}
 ) where {T,P,S}
-    y .= p.r2rplan * x
-    return nothing
+    return LinearAlgebra.mul!(y, p.r2rplan, x)
 end
 
 function *(p::R2RPlanInplace{T,P,S}, x::AbstractArray{S}) where {T,P,S}
-    LinearAlgebra.mul!(x, p, x)
-    return x
+    return LinearAlgebra.mul!(x, p, x)
 end
 
 function plan_inv(p::R2RPlanInplace)

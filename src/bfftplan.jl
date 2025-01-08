@@ -17,14 +17,12 @@ function LinearAlgebra.mul!(
     y::AbstractArray{S}, p::BFFTPlan{T,P,S}, x::AbstractArray{S}
 ) where {T,P,S}
     fx = p.bfftplan * x
-    y .= real(fx) .+ imag(fx)
-    return nothing
+    return y .= real(fx) .+ imag(fx)
 end
 
 function *(p::BFFTPlan{T,P,S}, x::AbstractArray{S}) where {T,P,S}
     z = similar(x)
-    LinearAlgebra.mul!(z, p, x)
-    return z
+    return LinearAlgebra.mul!(z, p, x)
 end
 
 function plan_inv(p::BFFTPlan)
@@ -47,13 +45,11 @@ function LinearAlgebra.mul!(
     y::AbstractArray{S}, p::BFFTPlanInplace{T,P,S}, x::AbstractArray{S}
 ) where {T,P,S}
     fx = p.bfftplan * x
-    y .= real(fx) .+ imag(fx)
-    return nothing
+    return y .= real(fx) .+ imag(fx)
 end
 
 function *(p::BFFTPlanInplace{T,P,S}, x::AbstractArray{S}) where {T,P,S}
-    LinearAlgebra.mul!(x, p, x)
-    return x
+    return LinearAlgebra.mul!(x, p, x)
 end
 
 function plan_inv(p::BFFTPlanInplace)
