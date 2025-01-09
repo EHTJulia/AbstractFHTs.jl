@@ -9,4 +9,4 @@ A general framework for fast Hartley transforms (FHTs) in Julia. This framework 
 
 
 ## Example implementations of FHTs using this framework
-- [`FastHartleyTransform.jl`](https://github.com/EHTJulia/FastHartleyTransform.jl) using [`FFTW.jl`](https://github.com/JuliaMath/FFTW.jl) for its FFT kernel
+- [`FastHartleyTransform.jl`](https://github.com/EHTJulia/FastHartleyTransform.jl) for CPU and NVIDIA CUDA GPUs.
